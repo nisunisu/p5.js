@@ -1,13 +1,27 @@
 let num=3; // shape用配列数
 let shape=[];
 let eyes;
+
+// GIF出力用変数
+// live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
+// let capturer = new CCapture({
+//   format: 'gif',
+//   workersPath: '../gif.js/dist/',
+//   verbose: true
+// });
+let canvas;
+
 function setup() {
-  createCanvas(400, 400);
+  let p5Canvas = createCanvas(400, 400);
+  canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
   for (let i = 0; i < num; i++) {
     shape[i]=new Shape(i*10);
   }
   eyes =new Eyes;
+  
+  // GIF出力開始
+  // capturer.start();
 }
 
 function draw() {
@@ -35,6 +49,16 @@ function draw() {
   eyes.display();
   eyes.setRotateDirection();
   eyes.rotate();
+  
+  // GIF出力
+  // if(frameCount < 90){
+  //   capturer.capture(canvas);
+  // }else{
+  //   // GIF出力と同時にdraw()も終了する
+  //   capturer.stop();
+  //   capturer.save();
+  //   noLoop();
+  // }
 }
 
 // ------------------------------------------
