@@ -1,6 +1,4 @@
-let num=3; // shape用配列数
-let shape=[];
-let eyes;
+let face;
 
 // GIF出力用変数
 // live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
@@ -15,10 +13,7 @@ function setup() {
   let p5Canvas = createCanvas(400, 400);
   canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-  for (let i = 0; i < num; i++) {
-    shape[i]=new Shape(i*10);
-  }
-  eyes =new Eyes;
+  face = new Face;
   
   // GIF出力開始
   // capturer.start();
@@ -26,29 +21,7 @@ function setup() {
 
 function draw() {
   background(100);
-  
-  // りんかく
-  for (let i = 0; i < num; i++) {
-    if(shape[i].currentframe > shape[i].waitframe){
-      // 内部フレーム数が一定値になったら円を表示する
-      shape[i].display();
-      if(shape[i].alpha>0){
-        // 徐々に大きく、薄くする
-        shape[i].expand();
-        shape[i].dilute();
-      }else{
-        // 円が消えたら初期化する
-        shape[i]=new Shape(i*10);
-      }
-    }
-    // 内部フレーム数をインクリメント
-    shape[i].updateframe();
-  }
-  
-  // キュートなお目目
-  eyes.display();
-  eyes.setRotateDirection();
-  eyes.rotate();
+  face.drawFace();
   
   // GIF出力
   // if(frameCount < 90){
@@ -59,6 +32,47 @@ function draw() {
   //   capturer.save();
   //   noLoop();
   // }
+}
+
+// ------------------------------------------
+// 輪郭Faceとお目目Eyesを使って顔Faceを描画する
+// ------------------------------------------
+class Face{
+  constructor(){
+    this.num=3; // 三同画面で1度に描画される輪郭の最大数
+    this.shape=[];
+    this.eyes;
+    for (let i = 0; i < this.num; i++) {
+      this.shape[i]=new Shape(i*10);
+    }
+    this.eyes =new Eyes;
+  }
+  
+  drawFace(){
+    // 輪郭。numの数だけ描画する
+    for (let i = 0; i < this.num; i++) {
+      // 内部フレーム数が一定値になったら円を表示する
+      if(this.shape[i].currentframe > this.shape[i].waitframe){
+        this.shape[i].display();
+        
+        // 徐々に大きく、薄くする。円が消えたら初期化する
+        if(this.shape[i].alpha>0){
+          this.shape[i].expand();
+          this.shape[i].dilute();
+        }else{
+          this.shape[i]=new Shape(i*10);
+        }
+      }
+      
+      // 内部フレーム数をインクリメント
+      this.shape[i].updateframe();
+    }
+    
+    // キュートなお目目
+    this.eyes.display();
+    this.eyes.setRotateDirection();
+    this.eyes.rotate();
+  }
 }
 
 // ------------------------------------------
