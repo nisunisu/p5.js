@@ -13,7 +13,7 @@ function setup() {
   let p5Canvas = createCanvas(400, 400);
   canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-  face = new Face;
+  face = new Face(random(360));
   
   // GIF出力開始
   // capturer.start();
@@ -24,7 +24,7 @@ function draw() {
   face.drawFace();
   
   // GIF出力
-  // if(frameCount < 90){
+  // if(frameCount < 240){
   //   capturer.capture(canvas);
   // }else{
   //   // GIF出力と同時にdraw()も終了する
@@ -35,17 +35,26 @@ function draw() {
 }
 
 // ------------------------------------------
-// 輪郭Faceとお目目Eyesを使って顔Faceを描画する
+// 輪郭Shapeとお目目Eyesを使って顔Faceを描画する
 // ------------------------------------------
 class Face{
-  constructor(){
+  constructor(hue){
+    //Shapeに渡す用変数
+    this.hue=hue;
+
+    // Shape
     this.num=3; // 三同画面で1度に描画される輪郭の最大数
     this.shape=[];
-    this.eyes;
     for (let i = 0; i < this.num; i++) {
-      this.shape[i]=new Shape(i*10);
+      // Shape(waitframe,)
+      const waitframe=i*10; // 1つ目の輪郭はウェイトタイム無し、2つ目以降はi*10フレームだけ待機する
+      this.shape[i]=new Shape(waitframe,this.hue);
     }
+
+    // Eyes
+    this.eyes;
     this.eyes =new Eyes;
+
   }
   
   drawFace(){
@@ -53,14 +62,17 @@ class Face{
     for (let i = 0; i < this.num; i++) {
       // 内部フレーム数が一定値になったら円を表示する
       if(this.shape[i].currentframe > this.shape[i].waitframe){
+        // お顔を表示
         this.shape[i].display();
-        
-        // 徐々に大きく、薄くする。円が消えたら初期化する
+
         if(this.shape[i].alpha>0){
+          // 徐々に大きく、薄くする
           this.shape[i].expand();
           this.shape[i].dilute();
         }else{
-          this.shape[i]=new Shape(i*10);
+          // 円が消えたら初期化する
+          const waitframe=i*10;
+          this.shape[i]=new Shape(waitframe,this.hue);
         }
       }
       
@@ -79,13 +91,14 @@ class Face{
 // 輪郭
 // ------------------------------------------
 class Shape{
-  constructor(waitframe){
+  constructor(waitframe,hue){
     this.num=60; // 円を構成する要素の数
     this.rad=150;
     this.alpha=80;
     this.xpos=width/2;
     this.ypos=height/2;
     this.yoff=random(1,1.5);
+    this.hue=hue;
 
     // 内部フレーム数 = 円が出現するまでの時間 の制御
     this.currentframe=0;
@@ -93,7 +106,7 @@ class Shape{
   }
   display(){
     noStroke();
-    fill(0,0,80,this.alpha);
+    fill(this.hue,20,80,this.alpha);
     // Shapeを用いた疑似的な円
     beginShape();
       // 中央下部にvertexを1つ配置することで首のように見せる
