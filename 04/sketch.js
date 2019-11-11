@@ -13,7 +13,7 @@ function setup() {
   let p5Canvas = createCanvas(400, 400);
   canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-  face = new Face(random(360),width/2,height/2);
+  face = new Face(random(360),width/2,height/2,100);
   
   // GIF出力開始
   // capturer.start();
@@ -38,11 +38,12 @@ function draw() {
 // 輪郭Shapeとお目目Eyesを使って顔Faceを描画する
 // ------------------------------------------
 class Face{
-  constructor(hue,xPos,yPos){
+  constructor(hue,xPos,yPos,distance){
     //Shapeに渡す用変数
     this.hue=hue;
     this.xPos=xPos;
     this.yPos=yPos;
+    this.distance=distance;
 
     // Shape
     this.num=3; // 三同画面で1度に描画される輪郭の最大数
@@ -50,7 +51,7 @@ class Face{
     for (let i = 0; i < this.num; i++) {
       // Shape(waitframe,)
       const waitframe=i*10; // 1つ目の輪郭はウェイトタイム無し、2つ目以降はi*10フレームだけ待機する
-      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos);
+      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance);
     }
 
     // Eyes
@@ -74,7 +75,7 @@ class Face{
         }else{
           // 円が消えたら初期化する
           const waitframe=i*10;
-          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos);
+          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance);
         }
       }
       
@@ -93,12 +94,13 @@ class Face{
 // 輪郭
 // ------------------------------------------
 class Shape{
-  constructor(waitframe,hue,xPos,yPos){
+  constructor(waitframe,hue,xPos,yPos,distance){
     this.num=60; // 円を構成する要素の数
     this.rad=150;
     this.alpha=80;
-    this.xpos=xPos;
-    this.ypos=yPos;
+    this.xPos=xPos;
+    this.yPos=yPos;
+    this.distance=distance; // 疑似円の中心から首の頂点までの長さ
     this.yoff=random(1,1.5);
     this.hue=hue;
 
@@ -112,7 +114,7 @@ class Shape{
     // Shapeを用いた疑似的な円
     beginShape();
       // 中央下部にvertexを1つ配置することで首のように見せる
-      vertex(width/2,height*4/5);
+      vertex(this.xPos,this.yPos+this.distance);
       
       // 2次元noise用変数。ここで常に0にする
       this.xoff=0;
@@ -122,8 +124,8 @@ class Shape{
           // angleが45°以上315°以下の場合だけ描画する
           const rad = noise(this.xoff,this.yoff) * this.rad;
           const angle_rotated = angle + HALF_PI; // HALF_PIを加算することでvertexの始点と終点を結ぶ線が凡そ水平になるようにする
-          const x = this.xpos + rad * cos(angle_rotated);
-          const y = this.ypos + rad * sin(angle_rotated);
+          const x = this.xPos + rad * cos(angle_rotated);
+          const y = this.yPos + rad * sin(angle_rotated);
           vertex(x,y);
         }
         this.xoff+=0.06;
