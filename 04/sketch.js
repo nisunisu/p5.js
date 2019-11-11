@@ -13,7 +13,7 @@ function setup() {
   let p5Canvas = createCanvas(400, 400);
   canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-  face = new Face(random(360));
+  face = new Face(random(360),width/2,height/2);
   
   // GIF出力開始
   // capturer.start();
@@ -38,9 +38,11 @@ function draw() {
 // 輪郭Shapeとお目目Eyesを使って顔Faceを描画する
 // ------------------------------------------
 class Face{
-  constructor(hue){
+  constructor(hue,xPos,yPos){
     //Shapeに渡す用変数
     this.hue=hue;
+    this.xPos=xPos;
+    this.yPos=yPos;
 
     // Shape
     this.num=3; // 三同画面で1度に描画される輪郭の最大数
@@ -48,12 +50,12 @@ class Face{
     for (let i = 0; i < this.num; i++) {
       // Shape(waitframe,)
       const waitframe=i*10; // 1つ目の輪郭はウェイトタイム無し、2つ目以降はi*10フレームだけ待機する
-      this.shape[i]=new Shape(waitframe,this.hue);
+      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos);
     }
 
     // Eyes
     this.eyes;
-    this.eyes =new Eyes;
+    this.eyes =new Eyes(this.xPos,this.yPos);
 
   }
   
@@ -72,7 +74,7 @@ class Face{
         }else{
           // 円が消えたら初期化する
           const waitframe=i*10;
-          this.shape[i]=new Shape(waitframe,this.hue);
+          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos);
         }
       }
       
@@ -91,12 +93,12 @@ class Face{
 // 輪郭
 // ------------------------------------------
 class Shape{
-  constructor(waitframe,hue){
+  constructor(waitframe,hue,xPos,yPos){
     this.num=60; // 円を構成する要素の数
     this.rad=150;
     this.alpha=80;
-    this.xpos=width/2;
-    this.ypos=height/2;
+    this.xpos=xPos;
+    this.ypos=yPos;
     this.yoff=random(1,1.5);
     this.hue=hue;
 
@@ -144,9 +146,9 @@ class Shape{
 // 目
 // ------------------------------------------
 class Eyes{
-  constructor(){
-    this.center_x=width/2;  // 両目の中心座標x
-    this.center_y=height/2; // 両目の中心座標y
+  constructor(xPos,yPos){
+    this.center_x=xPos; // 両目の中心座標x
+    this.center_y=yPos; // 両目の中心座標y
     this.rad=30;  // これ*2が目と目の距離
     this.angle=0; // 目の傾く角度。ラジアン。
     this.angleAdd=0.002;
