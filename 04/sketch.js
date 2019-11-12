@@ -42,7 +42,8 @@ function setup() {
       const _y = height*(2*j+1)/(2*yNum)
       const _distance=50;
       const _vertexNum=random(100,400);
-      face[i][j] = new Face(_hue,_x,_y,_distance,_vertexNum);
+      const _alphaAdd=random(0.5,1.8)* -1;
+      face[i][j] = new Face(_hue,_x,_y,_distance,_vertexNum,_alphaAdd);
     }
   }
   
@@ -73,13 +74,14 @@ function draw() {
 // 輪郭Shapeとお目目Eyesを使って顔Faceを描画する
 // ------------------------------------------
 class Face{
-  constructor(hue,xPos,yPos,distance,vertexNum){
+  constructor(hue,xPos,yPos,distance,vertexNum,alphaAdd){
     //Shapeに渡す用変数
     this.hue=hue;
     this.xPos=xPos;
     this.yPos=yPos;
     this.distance=distance;
     this.vertexNum=vertexNum;
+    this.alphaAdd=alphaAdd;
 
     // Shape
     this.num=3; // 三同画面で1度に描画される輪郭の最大数
@@ -87,7 +89,7 @@ class Face{
     for (let i = 0; i < this.num; i++) {
       // Shape(waitframe,)
       const waitframe=i*10; // 1つ目の輪郭はウェイトタイム無し、2つ目以降はi*10フレームだけ待機する
-      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum);
+      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum,this.alphaAdd);
     }
 
     // Eyes
@@ -111,7 +113,7 @@ class Face{
         }else{
           // 円が消えたら初期化する
           const waitframe=i*10;
-          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum);
+          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum,this.alphaAdd);
         }
       }
       
@@ -130,10 +132,11 @@ class Face{
 // 輪郭
 // ------------------------------------------
 class Shape{
-  constructor(waitframe,hue,xPos,yPos,distance,vertexNum){
+  constructor(waitframe,hue,xPos,yPos,distance,vertexNum,alphaAdd){
     this.vertexNum=vertexNum; // 円を構成する要素の数
     this.rad=80;
     this.alpha=80;
+    this.alphaAdd=alphaAdd;
     this.xPos=xPos;
     this.yPos=yPos;
     this.distance=distance; // 疑似円の中心から首の頂点までの長さ
@@ -175,7 +178,7 @@ class Shape{
   }
   // 薄くする
   dilute(){
-    this.alpha-=1.2;
+    this.alpha+=this.alphaAdd;
   }
   // 内部フレーム数のインクリメント
   updateframe(){
