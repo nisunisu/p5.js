@@ -37,7 +37,7 @@ function setup() {
       // 
       // -> i/xNum + (i+1)/xNum = (2*i + 1)/xNum
       // -> (2*i + 1)/xNum / 2 = (2*i+1)/(2*xNum)
-      const _hue = (i+i*j)*25;
+      const _hue = (i*j+j)*25;
       const _x = width *(2*i+1)/(2*xNum)
       const _y = height*(2*j+1)/(2*yNum)
       const _distance=50;
@@ -169,12 +169,15 @@ class Shape{
     endShape(CLOSE);
     this.yoff+=0.002;
   }
+  // 大きくする
   expand(){
     this.rad+=1;
   }
+  // 薄くする
   dilute(){
     this.alpha-=1.2;
   }
+  // 内部フレーム数のインクリメント
   updateframe(){
     this.currentframe++;
   }
