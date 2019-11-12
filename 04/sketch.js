@@ -41,7 +41,8 @@ function setup() {
       const _x = width *(2*i+1)/(2*xNum)
       const _y = height*(2*j+1)/(2*yNum)
       const _distance=50;
-      face[i][j] = new Face(_hue,_x,_y,_distance);
+      const _vertexNum=random(100,400);
+      face[i][j] = new Face(_hue,_x,_y,_distance,_vertexNum);
     }
   }
   
@@ -72,12 +73,13 @@ function draw() {
 // 輪郭Shapeとお目目Eyesを使って顔Faceを描画する
 // ------------------------------------------
 class Face{
-  constructor(hue,xPos,yPos,distance){
+  constructor(hue,xPos,yPos,distance,vertexNum){
     //Shapeに渡す用変数
     this.hue=hue;
     this.xPos=xPos;
     this.yPos=yPos;
     this.distance=distance;
+    this.vertexNum=vertexNum;
 
     // Shape
     this.num=3; // 三同画面で1度に描画される輪郭の最大数
@@ -85,7 +87,7 @@ class Face{
     for (let i = 0; i < this.num; i++) {
       // Shape(waitframe,)
       const waitframe=i*10; // 1つ目の輪郭はウェイトタイム無し、2つ目以降はi*10フレームだけ待機する
-      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance);
+      this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum);
     }
 
     // Eyes
@@ -109,7 +111,7 @@ class Face{
         }else{
           // 円が消えたら初期化する
           const waitframe=i*10;
-          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance);
+          this.shape[i]=new Shape(waitframe,this.hue,this.xPos,this.yPos,this.distance,this.vertexNum);
         }
       }
       
@@ -128,8 +130,8 @@ class Face{
 // 輪郭
 // ------------------------------------------
 class Shape{
-  constructor(waitframe,hue,xPos,yPos,distance){
-    this.num=150; // 円を構成する要素の数
+  constructor(waitframe,hue,xPos,yPos,distance,vertexNum){
+    this.vertexNum=vertexNum; // 円を構成する要素の数
     this.rad=80;
     this.alpha=80;
     this.xPos=xPos;
@@ -152,8 +154,8 @@ class Shape{
       
       // 2次元noise用変数。ここで常に0にする
       this.xoff=0;
-      for (let i = 0; i < this.num; i++) {
-        const angle = TWO_PI / this.num * [i];
+      for (let i = 0; i < this.vertexNum; i++) {
+        const angle = TWO_PI / this.vertexNum * [i];
         if (angle >= TWO_PI/8 && angle <= TWO_PI * 7/8) {
           // angleが45°以上315°以下の場合だけ描画する
           const rad = noise(this.xoff,this.yoff) * this.rad;
