@@ -1,4 +1,5 @@
-let face;
+let xNum=2;
+let face=[]; // 配列
 
 // GIF出力用変数
 // live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
@@ -13,7 +14,26 @@ function setup() {
   let p5Canvas = createCanvas(400, 400);
   canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-  face = new Face(random(360),width/2,height/2,100);
+  for (let i = 0; i < xNum; i++) {
+    // 計算式
+    // 
+    // 0       1       2      ...     xNum
+    // +-------+-------+-------+-------+
+    // |       |       |       |       |
+    // |       |       |       |       |
+    // |       |       |       |       |
+    // |       |       |       |       |
+    // |       |       |       |       |
+    // +-------+-------+-------+-------+
+    // ^
+    // width * i/xNum // when i=0
+    //         ^
+    //         width * (i+1)/xNum // when i=0
+    // 
+    // -> i/xNum + (i+1)/xNum = (2*i + 1)/xNum
+    // -> (2*i + 1)/xNum / 2 = (2*i+1)/(2*xNum)
+    face[i] = new Face(random(360),width*(2*i+1)/(2*xNum),height/2,100);
+  }
   
   // GIF出力開始
   // capturer.start();
@@ -21,7 +41,9 @@ function setup() {
 
 function draw() {
   background(100);
-  face.drawFace();
+  for (let i = 0; i < xNum; i++) {
+    face[i].drawFace();
+  }
   
   // GIF出力
   // if(frameCount < 240){
@@ -101,7 +123,7 @@ class Shape{
     this.xPos=xPos;
     this.yPos=yPos;
     this.distance=distance; // 疑似円の中心から首の頂点までの長さ
-    this.yoff=random(1,1.5);
+    this.yoff=random(100);
     this.hue=hue;
 
     // 内部フレーム数 = 円が出現するまでの時間 の制御
