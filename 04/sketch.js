@@ -1,5 +1,5 @@
-let xNum=3;
-let yNum=3;
+let xNum=4;
+let yNum=4;
 let face=[]; // 配列
 for (let i = 0; i < xNum; i++) {
   face[i] = [];
@@ -37,10 +37,10 @@ function setup() {
       // 
       // -> i/xNum + (i+1)/xNum = (2*i + 1)/xNum
       // -> (2*i + 1)/xNum / 2 = (2*i+1)/(2*xNum)
-      const _hue = random(360);
+      const _hue = (i+i*j)*25;
       const _x = width *(2*i+1)/(2*xNum)
       const _y = height*(2*j+1)/(2*yNum)
-      const _distance=100;
+      const _distance=50;
       face[i][j] = new Face(_hue,_x,_y,_distance);
     }
   }
@@ -129,8 +129,8 @@ class Face{
 // ------------------------------------------
 class Shape{
   constructor(waitframe,hue,xPos,yPos,distance){
-    this.num=60; // 円を構成する要素の数
-    this.rad=150;
+    this.num=150; // 円を構成する要素の数
+    this.rad=80;
     this.alpha=80;
     this.xPos=xPos;
     this.yPos=yPos;
@@ -185,11 +185,11 @@ class Eyes{
   constructor(xPos,yPos){
     this.center_x=xPos; // 両目の中心座標x
     this.center_y=yPos; // 両目の中心座標y
-    this.rad=30;  // これ*2が目と目の距離
+    this.rad=15;  // これ*2が目と目の距離
     this.angle=0; // 目の傾く角度。ラジアン。
     this.angleAdd=0.002;
     this.rad_black_eye=8;  // 黒目の大きさ
-    this.rad_white_eye=20; // 白目の大きさ
+    this.rad_white_eye=11; // 白目の大きさ
   }
   display(){
     // 座標計算
@@ -202,12 +202,12 @@ class Eyes{
     noStroke();
     
     // 白目
-    fill(0,0,800)
+    fill(0,0,800,80)
     ellipse(this.right_eye_x,this.right_eye_y,this.rad_white_eye,this.rad_white_eye);
     ellipse(this.left_eye_x, this.left_eye_y, this.rad_white_eye,this.rad_white_eye);
     
     // 黒目
-    fill(0,0,40)
+    fill(0,0,40,80)
     ellipse(this.right_eye_x,this.right_eye_y,this.rad_black_eye,this.rad_black_eye);
     ellipse(this.left_eye_x, this.left_eye_y, this.rad_black_eye,this.rad_black_eye);
   }
