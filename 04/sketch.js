@@ -134,8 +134,8 @@ class Face{
 class Shape{
   constructor(waitframe,hue,xPos,yPos,distance,vertexNum,alphaAdd){
     this.vertexNum=vertexNum; // 円を構成する要素の数
-    this.rad=80;
-    this.alpha=80;
+    this.rad=75;
+    this.alpha=70;
     this.alphaAdd=alphaAdd;
     this.xPos=xPos;
     this.yPos=yPos;
@@ -149,7 +149,7 @@ class Shape{
   }
   display(){
     noStroke();
-    fill(this.hue,20,80,this.alpha);
+    fill(this.hue,70,80,this.alpha);
     // Shapeを用いた疑似的な円
     beginShape();
       // 中央下部にvertexを1つ配置することで首のように見せる
@@ -195,7 +195,7 @@ class Eyes{
     this.center_y=yPos; // 両目の中心座標yのデフォルト値
     this.xPos=this.center_x; // 現在の位置
     this.yPos=this.center_y; // 現在の位置
-    this.rad=15;  // これ*2が目と目の距離
+    this.rad=12;  // これ*2が目と目の距離
     this.angle=random(-0.15,0.15); // 目の傾く角度。ラジアン。
     this.rad_black_eye=8;  // 黒目の大きさ
     this.rad_white_eye=11; // 白目の大きさ
