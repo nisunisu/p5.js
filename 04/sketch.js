@@ -123,8 +123,8 @@ class Face{
     
     // キュートなお目目
     this.eyes.display();
-    this.eyes.setRotateDirection();
-    this.eyes.rotate();
+    this.eyes.updateCurrentPosition();
+    this.eyes.updateOffset();
   }
 }
 
@@ -191,20 +191,23 @@ class Shape{
 // ------------------------------------------
 class Eyes{
   constructor(xPos,yPos){
-    this.center_x=xPos; // 両目の中心座標x
-    this.center_y=yPos; // 両目の中心座標y
+    this.center_x=xPos; // 両目の中心座標xのデフォルト値
+    this.center_y=yPos; // 両目の中心座標yのデフォルト値
+    this.xPos=this.center_x; // 現在の位置
+    this.yPos=this.center_y; // 現在の位置
     this.rad=15;  // これ*2が目と目の距離
-    this.angle=0; // 目の傾く角度。ラジアン。
-    this.angleAdd=0.002;
+    this.angle=random(-0.15,0.15); // 目の傾く角度。ラジアン。
     this.rad_black_eye=8;  // 黒目の大きさ
     this.rad_white_eye=11; // 白目の大きさ
+    this.xoff=random(360);
+    this.yoff=random(360);
   }
   display(){
     // 座標計算
-    this.right_eye_x=this.center_x + this.rad * cos(this.angle);
-    this.right_eye_y=this.center_y + this.rad * sin(this.angle);
-    this.left_eye_x =this.center_x + this.rad * cos(this.angle + PI);
-    this.left_eye_y =this.center_y + this.rad * sin(this.angle + PI);
+    this.right_eye_x=this.xPos + this.rad * cos(this.angle);
+    this.right_eye_y=this.yPos + this.rad * sin(this.angle);
+    this.left_eye_x =this.xPos + this.rad * cos(this.angle + PI);
+    this.left_eye_y =this.yPos + this.rad * sin(this.angle + PI);
     
     // global描画オプション
     noStroke();
@@ -219,13 +222,12 @@ class Eyes{
     ellipse(this.right_eye_x,this.right_eye_y,this.rad_black_eye,this.rad_black_eye);
     ellipse(this.left_eye_x, this.left_eye_y, this.rad_black_eye,this.rad_black_eye);
   }
-  setRotateDirection(){
-    // 45度を超えたら目の回転する方向を反転する
-    if (abs(this.angle) > QUARTER_PI/2){
-      this.angleAdd *= -1;
-    }
+  updateCurrentPosition(){
+    this.xPos = this.center_x + this.rad * ( noise(this.xoff)-1 );
+    this.yPos = this.center_y + this.rad * ( noise(this.yoff)-1 );
   }
-  rotate(){
-    this.angle+=this.angleAdd;
+  updateOffset(){
+    this.xoff+=0.02;
+    this.yoff+=0.02;
   }
 }
