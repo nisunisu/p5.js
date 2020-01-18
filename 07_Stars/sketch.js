@@ -44,7 +44,7 @@ class MovingRects{
         this.display(i);
         this.update_rad(i);
       }else{
-        this.increment_waitCount(i);
+        this.decrement_waitCount(i);
       }
     }
   }
@@ -62,7 +62,7 @@ class MovingRects{
       this.isOutOfCanvas = true;
     }
   }
-  increment_waitCount(i){
+  decrement_waitCount(i){
     this.wait_count[i]--;
   }
 }
