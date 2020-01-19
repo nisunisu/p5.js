@@ -46,6 +46,12 @@ class MovingRects{
       }else{
         this.decrement_waitCount(i);
       }
+      
+      if(this.isOutOfCanvas === true){
+        this.rad[i]=0;
+        this.wait_count[i]=10*i;
+        this.isOutOfCanvas=false;
+      }
     }
   }
   display(i){
