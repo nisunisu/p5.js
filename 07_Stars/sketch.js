@@ -28,7 +28,7 @@ function draw(){
 
 class MovingRects{
   constructor(){
-    this.interval=20;
+    this.interval=60;
     this.initial_interval=this.interval;
     this.rad=[0]; // 初期値0
   }
@@ -44,17 +44,17 @@ class MovingRects{
   display(i){
     push()
       rectMode(RADIUS);
-      let gray=map(this.rad[i],0,width,120,200);
+      let gray=map(this.rad[i],0,width,50,200);
       stroke(gray);
       noFill();
-      rect(width/2,height/2,this.rad[i],this.rad[i]/4);
+      rect(width/2,height/2,this.rad[i],this.rad[i]);
     pop()
   }
   update_rad(i){
     this.rad[i]+=5;
   }
   remove_currentRectangle(i){
-    if(this.rad[i] >= width/2){
+    if(this.rad[i] >= width*3/4){
       this.rad.shift();
     }
   }
