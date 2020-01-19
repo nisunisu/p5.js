@@ -57,7 +57,8 @@ class MovingRects{
   display(i){
     push()
       rectMode(RADIUS);
-      stroke(255);
+      let gray=map(this.rad[i],0,width,120,200);
+      stroke(gray);
       noFill();
       rect(width/2,height/2,this.rad[i],this.rad[i]*3/4);
     pop()
