@@ -46,8 +46,8 @@ function draw(){
 
 class MovingRects{
   constructor(){
-    this.interval=60;
-    this.initial_interval=this.interval;
+    this.wait_count=60;
+    this.interval=this.wait_count;
     this.rad=[0]; // 初期値0
   }
   run(){
@@ -56,7 +56,7 @@ class MovingRects{
       this.update_rad(i);
       this.remove_currentRectangle(i);
     }
-    this.decrement_interval();
+    this.decrement_waitCount();
     this.add_newRectangle();
   }
   display(i){
@@ -83,13 +83,13 @@ class MovingRects{
       this.rad.shift();
     }
   }
-  decrement_interval(){
-    this.interval--;
+  decrement_waitCount(){
+    this.wait_count--;
   }
   add_newRectangle(){
-    if(this.interval === 0){
+    if(this.wait_count === 0){
       this.rad.push(0); // 末尾に半径0の要素を追加
-      this.interval=this.initial_interval; // intervalをリセット
+      this.wait_count=this.interval; // wait_countをリセット
     }
   }
 }
@@ -162,7 +162,7 @@ class MovingStars {
     if(this.isVisible===true){
       if(this.radius < sqrt(2) * width/2 + this.diameter){
         this.radius_acceleration+=0.1;
-        this.radius+= 2 + this.radius_acceleration;
+        this.radius+= 2 + this.radius_acceleration; // 加速度をつける
         this.diameter+=0.03;
       }else{
         this.isOut=true;
