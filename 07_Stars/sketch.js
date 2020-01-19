@@ -62,10 +62,17 @@ class MovingRects{
   display(i){
     push()
       rectMode(RADIUS);
-      let gray=map(this.rad[i],0,width,50,200);
-      stroke(gray);
+      translate(width/2,height/2);
       noFill();
-      rect(width/2,height/2,this.rad[i],this.rad[i]);
+      let gray=map(this.rad[i],0,width/2,50,100);
+      stroke(gray);
+      let weight=map(this.rad[i],0,width/2,0,2);
+      strokeWeight(weight);
+      // rectangle by line
+      line( this.rad[i],-height/2, this.rad[i],height/2); // 縦線
+      line(-this.rad[i],-height/2,-this.rad[i],height/2); // 縦線
+      line(-width/2, this.rad[i],width/2, this.rad[i]); // 横線
+      line(-width/2,-this.rad[i],width/2,-this.rad[i]); // 横線
     pop()
   }
   update_rad(i){
