@@ -11,7 +11,7 @@ function setup() {
   for (let i = 0; i < moving_stars.length; i++) {
     moving_stars[i] = new MovingStars(random()*TWO_PI,random(120));
   }
-  moving_rects = new MovingRects(5);
+  moving_rects = new MovingRects();
 
 }
 function draw(){
@@ -27,32 +27,19 @@ function draw(){
 }
 
 class MovingRects{
-  constructor(rect_num){
-    this.rect_num=rect_num;
-    this.rad =new Array(this.rect_num);
-    this.wait_count =new Array(this.rect_num);
-    this.isOutOfCanvas=new Array(this.rect_num);
-    for (let i = 0; i < this.rect_num; i++) {
-      this.rad[i]=0;
-      this.wait_count[i]=10*i;
-      this.isOutOfCanvas=false;
-    }
+  constructor(){
+    this.interval=20;
+    this.initial_interval=this.interval;
+    this.rad=[0]; // 初期値0
   }
   run(){
-    for (let i = 0; i < this.rect_num; i++) {
-      if(this.wait_count[i] <= 0) {
-        this.display(i);
-        this.update_rad(i);
-      }else{
-        this.decrement_waitCount(i);
-      }
-      
-      if(this.isOutOfCanvas === true){
-        this.rad[i]=0;
-        this.wait_count[i]=10*i;
-        this.isOutOfCanvas=false;
-      }
+    for (let i = 0; i < this.rad.length; i++) {
+      this.display(i);
+      this.update_rad(i);
+      this.remove_currentRectangle(i);
     }
+    this.decrement_interval();
+    this.add_newRectangle();
   }
   display(i){
     push()
@@ -60,17 +47,25 @@ class MovingRects{
       let gray=map(this.rad[i],0,width,120,200);
       stroke(gray);
       noFill();
-      rect(width/2,height/2,this.rad[i],this.rad[i]*3/4);
+      rect(width/2,height/2,this.rad[i],this.rad[i]/4);
     pop()
   }
   update_rad(i){
     this.rad[i]+=5;
-    if(this.rad[i] > width/2){
-      this.isOutOfCanvas = true;
+  }
+  remove_currentRectangle(i){
+    if(this.rad[i] >= width/2){
+      this.rad.shift();
     }
   }
-  decrement_waitCount(i){
-    this.wait_count[i]--;
+  decrement_interval(){
+    this.interval--;
+  }
+  add_newRectangle(){
+    if(this.interval === 0){
+      this.rad.push(0); // 末尾に半径0の要素を追加
+      this.interval=this.initial_interval; // intervalをリセット
+    }
   }
 }
 
