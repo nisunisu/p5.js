@@ -59,7 +59,7 @@ class MovingRects{
       rectMode(RADIUS);
       stroke(255);
       noFill();
-      rect(width/2,height/2,this.rad[i],this.rad[i]);
+      rect(width/2,height/2,this.rad[i],this.rad[i]*3/4);
     pop()
   }
   update_rad(i){
