@@ -46,9 +46,10 @@ function draw(){
 
 class MovingRects{
   constructor(){
-    this.wait_count=60;
+    this.wait_count=53;
     this.interval=this.wait_count;
     this.rad=[0]; // 初期値0
+    this.rad_acceleration=0.3;
   }
   run(){
     for (let i = 0; i < this.rad.length; i++) {
@@ -64,9 +65,9 @@ class MovingRects{
       rectMode(RADIUS);
       translate(width/2,height/2);
       noFill();
-      let gray=map(this.rad[i],0,width/2,50,100);
+      let gray=map(this.rad[i],0,width/2,50,80);
       stroke(gray);
-      let weight=map(this.rad[i],0,width/2,0,2);
+      let weight=map(this.rad[i],0,width/2,0,4);
       strokeWeight(weight);
       // rectangle by line
       line( this.rad[i],-height/2, this.rad[i],height/2); // 縦線
@@ -76,7 +77,7 @@ class MovingRects{
     pop()
   }
   update_rad(i){
-    this.rad[i]+=5;
+    this.rad[i]+=5+this.rad_acceleration;
   }
   remove_currentRectangle(i){
     if(this.rad[i] >= width*3/4){
@@ -88,6 +89,9 @@ class MovingRects{
   }
   add_newRectangle(){
     if(this.wait_count === 0){
+      if(this.interval > 5){
+        this.interval-=6;
+      }
       this.rad.push(0); // 末尾に半径0の要素を追加
       this.wait_count=this.interval; // wait_countをリセット
     }
