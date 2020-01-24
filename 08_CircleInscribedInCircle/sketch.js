@@ -1,12 +1,8 @@
-let r1=180;
-let r2=120;
-let r3=80;
-let r4=50;
-let angle_1=0;
-let angle_2=0;
-let angle_3=0;
-let extraCanvas;
-
+let root_circle_radius;
+let root_circle_x;
+let root_circle_y;
+let num=5;
+let ciic=[];
 // GIF出力用変数
 // live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
 // let capturer = new CCapture({
@@ -20,46 +16,36 @@ function setup(){
   // let p5Canvas = createCanvas(400, 400);
   // canvas = p5Canvas.canvas;
   createCanvas(400,400);
-  extraCanvas=createGraphics(400,400);
-  colorMode(HSB,360,100,100);
+  colorMode(HSB,360,0,0);
+  noFill(); 
+  root_circle_radius=170;
+  root_circle_x=width/2;
+  root_circle_y=height/2; 
+  let _radius=root_circle_radius;
+  for(let i=0; i<num; i++){
+    ciic[i] = new CircleInscribedInCircle(_radius*0.8,360/num*i);
+    _radius = ciic[i].radius;
+  }
   // GIF出力開始
   // capturer.start();
 }
 
 function draw(){
-  background(0,0,20);
-  noFill();
+  background(0,0,100);
 
-  let x0=width/2;
-  let y0=height/2;
-  stroke(0,80,100);
-  ellipse(x0,y0,5,5);
-  ellipse(x0,y0,r1*2,r1*2); 
+  // 一番外側のx,y,radを設定
+  let _x=root_circle_x;
+  let _y=root_circle_y;
+  let _radius=root_circle_radius;
+  for (let i = 0; i < num; i++) {
+    ciic[i].run(_x,_y,_radius);
 
-  let x1=x0 + (r1 - r2) * cos(radians(angle_1));
-  let y1=y0 + (r1 - r2) * sin(radians(angle_1));
-  stroke(90,80,100);
-  ellipse(x1,y1,5,5);
-  ellipse(x1,y1,r2*2,r2*2); 
+    // 次のforのためにパラメータをアップデート
+    _x =ciic[i].get_my_circle_xPos();
+    _y =ciic[i].get_my_circle_yPos();
+    _radius=ciic[i].get_my_circle_radius();
+  }
 
-  let x2=x1 + (r2 - r3) * cos(radians(angle_2));
-  let y2=y1 + (r2 - r3) * sin(radians(angle_2));
-  stroke(180,80,100);
-  ellipse(x2,y2,5.5);
-  ellipse(x2,y2,r3*2,r3*2); 
-
-  let x3=x2 + (r3 - r4) * cos(radians(angle_3));
-  let y3=y2 + (r3 - r4) * sin(radians(angle_3));
-  stroke(270,80,100);
-  ellipse(x3,y3,5.5);
-  ellipse(x3,y3,r4*2,r4*2); 
-
-  extraCanvas.fill(0,0,100);
-  extraCanvas.ellipse(x3,y3,2,2);
-  image(extraCanvas,0,0);
-
-  update();
-  
   // GIF出力
   // if(frameCount <= 360){
   //   capturer.capture(canvas);
@@ -70,27 +56,44 @@ function draw(){
   //   noLoop();
   // }
 }
-function update(){
-  angle_1++;
-  angle_2+=3;
-  angle_3+=5;
-}
-
-// ----------------------------------------------------------
 
 class CircleInscribedInCircle{
   // a circle inscribed in a circle : 円に内接する円
-  constructor(my_radius,outercircle_x,outercircle_y,outercircle_radius){
-    this.my_radius=my_radius;
-    this.my_diameter=this.my_radius*2;
-    this.my_angle=0;
-    this.outercircle_x=outercircle_x;
-    this.outercircle_y=outercircle_y;
-    this.outercircle_radius=outercircle_radius;
+  constructor(my_radius,hue){
+    this.radius=my_radius;
+    this.dia=this.radius*2;
+    this.angle=0;
+    this.angle_add=random(1,5);
+    this.xPos;
+    this.yPos;
+    this.hue=hue;
   }
-  display(){
-    let xPos=this.outercircle_x + (this.outercircle_radius - this.my_radius) * cos(radians(this.my_angle));
-    let yPos=this.outercircle_y + (this.outercircle_radius - this.my_radius) * sin(radians(this.my_angle));
-    ellipse(xPos,yPos,this.my_diameter,this.my_diameter);
+  run(outercircle_x,outercircle_y,outercircle_radius){
+    this.set_my_circle_position(outercircle_x,outercircle_y,outercircle_radius);
+    this.display_my_circle();
+    this.update_angle();
+  }
+  set_my_circle_position(outercircle_x,outercircle_y,outercircle_radius){
+    this.xPos=outercircle_x + (outercircle_radius - this.radius) * cos(radians(this.angle));
+    this.yPos=outercircle_y + (outercircle_radius - this.radius) * sin(radians(this.angle));
+  }
+  display_my_circle(){
+    push();
+      stroke(this.hue,80,80);
+      ellipse(this.xPos, this.yPos, 5, 5);
+      ellipse(this.xPos, this.yPos, this.radius*2, this.radius*2);
+    pop();
+  }
+  update_angle(){
+    this.angle+=this.angle_add;
+  }
+  get_my_circle_xPos(){
+    return this.xPos;
+  }
+  get_my_circle_yPos(){
+    return this.yPos;
+  }
+  get_my_circle_radius(){
+    return this.radius;
   }
 }
