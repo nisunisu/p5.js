@@ -1,7 +1,7 @@
 let root_circle_radius;
 let root_circle_x;
 let root_circle_y;
-let num=5;
+let num=50;
 let ciic=[];
 // GIF出力用変数
 // live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
@@ -15,23 +15,25 @@ let ciic=[];
 function setup(){
   // let p5Canvas = createCanvas(400, 400);
   // canvas = p5Canvas.canvas;
-  createCanvas(400,400);
-  colorMode(HSB,360,0,0);
+  createCanvas(windowWidth,windowHeight);
+  colorMode(HSB,360,100,100,100);
+	// blendMode(ADD);
   noFill(); 
-  root_circle_radius=170;
+  root_circle_radius=400;
   root_circle_x=width/2;
   root_circle_y=height/2; 
   let _radius=root_circle_radius;
   for(let i=0; i<num; i++){
-    ciic[i] = new CircleInscribedInCircle(_radius*0.8,360/num*i);
+    ciic[i] = new CircleInscribedInCircle(_radius*0.9,360/num*i,(i+1)*2);
     _radius = ciic[i].radius;
   }
   // GIF出力開始
   // capturer.start();
+	// noLoop();
 }
 
 function draw(){
-  background(0,0,100);
+  background(0,0,100,5);
 
   // 一番外側のx,y,radを設定
   let _x=root_circle_x;
@@ -59,11 +61,11 @@ function draw(){
 
 class CircleInscribedInCircle{
   // a circle inscribed in a circle : 円に内接する円
-  constructor(my_radius,hue){
+  constructor(my_radius,hue,angle_add){
     this.radius=my_radius;
     this.dia=this.radius*2;
     this.angle=0;
-    this.angle_add=random(1,5);
+    this.angle_add=angle_add;
     this.xPos;
     this.yPos;
     this.hue=hue;
