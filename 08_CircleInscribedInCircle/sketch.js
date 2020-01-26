@@ -13,23 +13,21 @@ let ciic=[];
 // let canvas;
 
 function setup(){
-  // let p5Canvas = createCanvas(400, 400);
-  // canvas = p5Canvas.canvas;
-  createCanvas(windowWidth,windowHeight);
+  let p5Canvas = createCanvas(400,400);
+  canvas = p5Canvas.canvas;
   colorMode(HSB,360,100,100,100);
-	// blendMode(ADD);
   noFill(); 
-  root_circle_radius=400;
+  root_circle_radius=270;
   root_circle_x=width/2;
   root_circle_y=height/2; 
   let _radius=root_circle_radius;
   for(let i=0; i<num; i++){
-    ciic[i] = new CircleInscribedInCircle(_radius*0.9,360/num*i,(i+1)*2);
+    let _hue=map(_radius*0.9,0,width/2,0,280);
+    ciic[i] = new CircleInscribedInCircle(_radius*0.9,_hue,(i+1)*2);
     _radius = ciic[i].radius;
   }
   // GIF出力開始
   // capturer.start();
-	// noLoop();
 }
 
 function draw(){
@@ -49,7 +47,7 @@ function draw(){
   }
 
   // GIF出力
-  // if(frameCount <= 360){
+  // if(frameCount <= 180){
   //   capturer.capture(canvas);
   // }else{
   //   // GIF出力と同時にdraw()も終了する
