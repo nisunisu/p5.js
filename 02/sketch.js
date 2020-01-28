@@ -6,15 +6,15 @@ let hue_add=100;
 
 function setup() {
   createCanvas(400, 400);
-	colorMode(HSB,360,100,100,100);
-	frameRate(5);
-	// rectMode(CENTER);
-	// blendMode(ADD);
-	strokeWeight(3);
-	
-	xoff=random(300);
-	yoff=0;
-	side=width/num;
+  colorMode(HSB,360,100,100,100);
+  frameRate(5);
+  // rectMode(CENTER);
+  // blendMode(ADD);
+  strokeWeight(3);
+  
+  xoff=random(300);
+  yoff=0;
+  side=width/num;
 }
 
 function draw() {
@@ -23,14 +23,14 @@ function draw() {
     for(let x=0; x<width; x+=side){
       const thisXoff=xoff+x/500;
       const thisYoff=yoff+y/500;
-			const hue=360*noise(thisXoff,thisYoff);
-			fill(hue,80,100,70);
-			stroke(0,20,70,70);
+      const hue=360*noise(thisXoff,thisYoff);
+      fill(hue,80,100,70);
+      stroke(0,20,70,70);
       rect(x,y,side,side);
     }
   }
   
   //update
   xoff+=0.05;
-	yoff+=0.07;
+  yoff+=0.07;
 }
