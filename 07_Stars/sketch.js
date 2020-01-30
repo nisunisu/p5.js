@@ -1,6 +1,7 @@
 let moving_stars=new Array(100);
 let static_stars;
 let moving_rects;
+let output_canvas;
 
 // GIF出力用変数
 // live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
@@ -12,13 +13,13 @@ let moving_rects;
 // let canvas;
 
 function setup() {
-  let p5Canvas = createCanvas(400, 400);
-  canvas = p5Canvas.canvas;
+  let p5Element = createCanvas(400, 400);
   static_stars = new StaticStars(100);
   for (let i = 0; i < moving_stars.length; i++) {
     moving_stars[i] = new MovingStars(random()*TWO_PI,random(120));
   }
   moving_rects = new MovingRects();
+  output_canvas = new OutputCanvas(p5Element.canvas);
   // GIF出力開始
   // capturer.start();
 }
@@ -33,6 +34,7 @@ function draw(){
     }
   }
   moving_rects.run();
+  output_canvas.run(frameCount,180); // GIF出力
   // GIF出力
   // if(frameCount < 180){
   //   capturer.capture(canvas);
