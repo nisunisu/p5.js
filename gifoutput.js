@@ -10,15 +10,15 @@
 // }
 
 class OutputCanvas{
-  // constructor(HtmlCanvasElement_canvas,format_type,max_frame_count){
-  constructor(HtmlCanvasElement_canvas){
+  constructor(HtmlCanvasElement_canvas,format_type,max_frame_count){
+  // constructor(HtmlCanvasElement_canvas){
     this.canvas=HtmlCanvasElement_canvas; // HTMLCanvasElementインタフェースのcanvas要素
-    // this.format_type=format_type; // gif or png
-    // this.max_frame_count=max_frame_count;
+    this.format_type=format_type; // gif or png
+    this.max_frame_count=max_frame_count;
 
     this.capturer = new CCapture({
-      // format: this.format_type,
-      format: 'gif',
+      format: this.format_type,
+      // format: 'gif',
       workersPath: '../gif.js/dist/',
       verbose: true
     });
@@ -26,10 +26,10 @@ class OutputCanvas{
   }
 
   // GIF出力
-  // run (current_frame_count){
-  run (current_frame_count,max_frame_count){
-    // if( current_frame_count <= this.max_frame_count ){
-    if( current_frame_count <= max_frame_count ){
+  run (current_frame_count){
+  // run (current_frame_count,max_frame_count){
+    if( current_frame_count <= this.max_frame_count ){
+    // if( current_frame_count <= max_frame_count ){
       this.capturer.capture(this.canvas);
     }else{
       this.capturer.stop();

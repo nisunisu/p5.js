@@ -19,7 +19,7 @@ function setup() {
     moving_stars[i] = new MovingStars(random()*TWO_PI,random(120));
   }
   moving_rects = new MovingRects();
-  output_canvas = new OutputCanvas(p5Element.canvas);
+  output_canvas = new OutputCanvas(p5Element.canvas,"gif",180);
   // GIF出力開始
   // capturer.start();
 }
@@ -34,7 +34,7 @@ function draw(){
     }
   }
   moving_rects.run();
-  output_canvas.run(frameCount,180); // GIF出力
+  output_canvas.run(frameCount); // GIF出力
   // GIF出力
   // if(frameCount < 180){
   //   capturer.capture(canvas);
