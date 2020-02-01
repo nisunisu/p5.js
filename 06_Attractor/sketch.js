@@ -1,11 +1,14 @@
 // 写経
 // https://github.com/nature-of-code/noc-examples-p5.js/tree/master/chp02_forces/NOC_2_06_attraction
 
+let output_canvas; // ファイル出力
+
 function setup(){
-  createCanvas(500,500);
+  let p5Element = createCanvas(500,500);
   textAlign(CENTER,CENTER);
   m=new Mover(1);     // 物体
   a=new Attractor(20); // 引力を持つモノ
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 function draw(){
   background(255);
@@ -13,9 +16,10 @@ function draw(){
   let force = a.attract(m);
   m.applyForce(force); // mに力(a由来のforce)を作用させる
   m.update();
-  
   a.display();
   m.display();
+
+  // output_canvas.run(frameCount); // ファイル出力
 }
 
 class Attractor{

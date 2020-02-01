@@ -3,12 +3,15 @@ let num_y=15;
 let scl_x; // 距離
 let scl_y; // 距離
 let hue=0;
+let output_canvas; // ファイル出力
+
 function setup(){
-  createCanvas(400,400);
+  let p5Element = createCanvas(400,400);
   colorMode(HSB,360,100,100,100);
   scl_x=width /num_x;
   scl_y=height/num_y;
   noLoop();
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw(){
@@ -31,4 +34,5 @@ function draw(){
   }
   
   // save("myCanvas.jpg");
+  // output_canvas.run(frameCount); // ファイル出力
 }

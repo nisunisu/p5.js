@@ -3,9 +3,11 @@ let end  =QUARTER_PI;
 let startAdd=0.03;
 let endAdd  =0.01;
 let radius=100;
+let output_canvas; // ファイル出力
 
 function setup() {
-  createCanvas(400, 400);
+  let p5Element = createCanvas(400, 400);
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw() {
@@ -21,4 +23,6 @@ function draw() {
     start=start%PI;
     end  =end%PI;
   }
+  
+  // output_canvas.run(frameCount); // ファイル出力
 }

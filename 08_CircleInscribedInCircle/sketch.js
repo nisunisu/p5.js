@@ -3,18 +3,10 @@ let root_circle_x;
 let root_circle_y;
 let num=50;
 let ciic=[];
-// GIF出力用変数
-// live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
-// let capturer = new CCapture({
-//   format: 'gif',
-//   workersPath: '../gif.js/dist/',
-//   verbose: true
-// });
-// let canvas;
+let output_canvas; // ファイル出力
 
 function setup(){
-  let p5Canvas = createCanvas(400,400);
-  canvas = p5Canvas.canvas;
+  let p5Element = createCanvas(400,400);
   colorMode(HSB,360,100,100,100);
   noFill(); 
   root_circle_radius=270;
@@ -26,8 +18,8 @@ function setup(){
     ciic[i] = new CircleInscribedInCircle(_radius*0.9,_hue,(i+1)*2);
     _radius = ciic[i].radius;
   }
-  // GIF出力開始
-  // capturer.start();
+
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw(){
@@ -46,15 +38,7 @@ function draw(){
     _radius=ciic[i].get_my_circle_radius();
   }
 
-  // GIF出力
-  // if(frameCount <= 180){
-  //   capturer.capture(canvas);
-  // }else{
-  //   // GIF出力と同時にdraw()も終了する
-  //   capturer.stop();
-  //   capturer.save();
-  //   noLoop();
-  // }
+  // output_canvas.run(frameCount); // ファイル出力
 }
 
 class CircleInscribedInCircle{

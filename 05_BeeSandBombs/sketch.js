@@ -5,24 +5,14 @@ let angle = 0;
 let w = 24;
 let ma;
 let maxD;
-
-// GIF出力用変数
-// live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
-// let capturer = new CCapture({
-//   format: 'gif',
-//   workersPath: '../gif.js/dist/',
-//   verbose: true
-// });
-// let canvas;
+let output_canvas; // ファイル出力
 
 function setup(){
-  let p5Canvas = createCanvas(400, 400, WEBGL);
-  canvas = p5Canvas.canvas;
+  let p5Element = createCanvas(400, 400, WEBGL);
   ma=atan(cos(QUARTER_PI));
   maxD=dist(0,0,200,200);
 
-  // GIF出力開始
-  // capturer.start();
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw(){
@@ -46,13 +36,5 @@ function draw(){
   }
   angle-=0.1;
 
-  // GIF出力
-  // if(frameCount < 180){
-  //   capturer.capture(canvas);
-  // }else{
-  //   // GIF出力と同時にdraw()も終了する
-  //   capturer.stop();
-  //   capturer.save();
-  //   noLoop();
-  // }
+  // output_canvas.run(frameCount); // ファイル出力
 }

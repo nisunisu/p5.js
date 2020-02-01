@@ -4,19 +4,10 @@ let face=[]; // 配列
 for (let i = 0; i < xNum; i++) {
   face[i] = [];
 }
-
-// GIF出力用変数
-// live-p5が外部ファイル読み込みに対応していないため、GIF出力が必要な時以外はコメントアウトする
-// let capturer = new CCapture({
-//   format: 'gif',
-//   workersPath: '../gif.js/dist/',
-//   verbose: true
-// });
-let canvas;
+let output_canvas; // ファイル出力
 
 function setup() {
-  let p5Canvas = createCanvas(400, 400);
-  canvas = p5Canvas.canvas;
+  let p5Element = createCanvas(400, 400);
   colorMode(HSB,360,100,100,100);
   for (let i = 0; i < xNum; i++) {
     for (let j = 0; j < yNum; j++) {
@@ -47,8 +38,7 @@ function setup() {
     }
   }
   
-  // GIF出力開始
-  // capturer.start();
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw() {
@@ -59,15 +49,7 @@ function draw() {
     }
   }
   
-  // GIF出力
-  // if(frameCount < 240){
-  //   capturer.capture(canvas);
-  // }else{
-  //   // GIF出力と同時にdraw()も終了する
-  //   capturer.stop();
-  //   capturer.save();
-  //   noLoop();
-  // }
+  // output_canvas.run(frameCount); // ファイル出力
 }
 
 // ------------------------------------------

@@ -3,9 +3,10 @@ let yoff;
 const num=10;
 let side;
 let hue_add=100;
+let output_canvas; // ファイル出力
 
 function setup() {
-  createCanvas(400, 400);
+  let p5Element = createCanvas(400, 400);
   colorMode(HSB,360,100,100,100);
   frameRate(5);
   // rectMode(CENTER);
@@ -15,6 +16,8 @@ function setup() {
   xoff=random(300);
   yoff=0;
   side=width/num;
+
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw() {
@@ -33,4 +36,6 @@ function draw() {
   //update
   xoff+=0.05;
   yoff+=0.07;
+
+  // output_canvas.run(frameCount); // ファイル出力
 }

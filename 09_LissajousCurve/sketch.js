@@ -2,10 +2,12 @@ let rad=80;
 let angle_1=0;
 let angle_2=0;
 let extraCanvas;
+let output_canvas; // ファイル出力
 
 function setup(){
-  createCanvas(400,400);
+  let p5Element = createCanvas(400,400);
   extraCanvas=createGraphics(400,400);
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 function draw(){
   background(255);
@@ -39,4 +41,5 @@ function draw(){
 
   angle_1+=1.5;
   angle_2+=1;
+  // output_canvas.run(frameCount); // ファイル出力
 }

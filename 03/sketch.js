@@ -13,8 +13,10 @@ let hue;
 let saturation;
 let brightness;
 
+let output_canvas; // ファイル出力
+
 function setup() {
-  createCanvas(400,400);
+  let p5Element = createCanvas(400,400);
   frameRate(5);
   noFill();
   strokeWeight(1);
@@ -26,6 +28,8 @@ function setup() {
   thisRadius=0;
   baseXpos=width/2;
   baseYpos=height/2;
+
+  // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 
 function draw() {
@@ -59,6 +63,8 @@ function draw() {
       }
     endShape();
   }
+
+  // output_canvas.run(frameCount); // ファイル出力
 }
 
 function fnMyNoise(val){
