@@ -1,4 +1,5 @@
 let maxlevel=20;
+let output_canvas; // ファイル出力
 
 function setup() {
 	let p5Element = createCanvas(windowWidth, windowHeight);
