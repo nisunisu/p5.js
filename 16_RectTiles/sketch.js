@@ -1,47 +1,83 @@
-let current_angle = 0;
-let t = 0;
-let waitCount=30;
-let my_easing;
+let x_num = 3;
+let y_num = 3;
+let rotate_rect;
 
 let output_canvas;
 function setup() {
   let p5Element = createCanvas(400, 400);
   frameRate(30);
-  angleMode(DEGREES);
-  // noFill();
+  noFill();
   colorMode(HSB, 360, 100, 100, 100);
-  rectMode(CENTER);
-  my_easing = new myEasing();
+  angleMode(DEGREES); // rotateRectクラス用
+  rectMode(CENTER); // rotateRectクラス用
+  rotate_rect = new rotateRect(x_num, y_num);
+  rotate_rect.initialize_all();
 
   // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 function draw() {
   background(0, 0, 50);
-  translate(width / 2, height / 2);
-  push();
-  rotate(current_angle);
-  rect(0, 0, 30, 100);
-  pop();
+  rotate_rect.run();
 
-  // update
-  if(waitCount <= 0 ){
-    current_angle = my_easing.get(t) * 90;
-    t += 0.02;
-    if (t > 1) {
-      t = 0;
-      waitCount=30;
-      current_angle=0;
-    }
-  }
-  waitCount--;
-
-  text(`angle : ${floor(current_angle)}
-my_easing.get(t) : ${my_easing.get(t)}
-t : ${t}`, -100, 100);
+  //   text(`angle : ${floor(rotate_rect.current_angle[0])}
+  // t : ${rotate_rect.t[0]}`, -100, 100);
 
   // output_canvas.run(frameCount); // ファイル出力
 }
 
+class rotateRect {
+  constructor(x_num, y_num) {
+    this.x_num = x_num;
+    this.y_num = y_num
+    this.num = x_num * y_num;
+    this.my_easing = new myEasing();
+
+    // オブジェクトによって内容が変わるので配列にする
+    this.current_angle = [];
+    this.t = [];
+    this.waitCount = [];
+  }
+  initialize(num) {
+    this.current_angle[num] = 0;
+    this.t[num] = 0;
+    this.waitCount[num] = 10 * num;
+  }
+  initialize_all() {
+    for (let i = 0; i < this.num; i++) {
+      this.initialize(i);
+    }
+  }
+  run() {
+    this.display_all();
+    this.update_all();
+  }
+  display_all() {
+    for (let cnt_y = 0; cnt_y < this.y_num; cnt_y++) {
+      for (let cnt_x = 0; cnt_x < this.x_num; cnt_x++) {
+        const _i = cnt_y * cnt_x;
+        const _x = (cnt_x + 1) / (this.x_num + 1) * width;
+        const _y = (cnt_y + 1) / (this.y_num + 1) * height;
+        push();
+        translate(_x, _y);
+        rotate(this.current_angle[_i]);
+        rect(0, 0, 30, 100);
+        pop();
+      }
+    }
+  }
+  update_all() {
+    for (let i = 0; i < this.num; i++) {
+      if (this.waitCount[i] <= 0) {
+        this.current_angle[i] = this.my_easing.get(this.t[i]) * 90;
+        this.t[i] += 0.02;
+        if (this.t[i] > 1) {
+          this.initialize(i);
+        }
+      }
+      this.waitCount[i]--;
+    }
+  }
+}
 
 class myEasing {
   constructor() {
