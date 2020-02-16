@@ -1,75 +1,58 @@
-let x1, x2, x3, x4; // xpos
-let y1, y2, y3, y4; // ypos
-let a1, a2, a3, a4; // angle
+let current_angle = 0;
+let t = 0;
+let val = 0;
 let output_canvas;
+
+let my_easing;
 
 function setup() {
   let p5Element = createCanvas(400, 400);
-  frameRate(3);
-  noFill();
+  frameRate(30);
+  angleMode(DEGREES);
+  // noFill();
   colorMode(HSB, 360, 100, 100, 100);
-  x1=-10, y1= 50, a1=atan(y1/x1);
-  x2= 10, y2= 50, a2=atan(y2/x2);
-  x3= 10, y3=-50, a3=atan(y3/x3);
-  x4=-10, y4=-50, a4=atan(y4/x4);
+  rectMode(CENTER);
+  my_easing = new myEasing();
+
   // output_canvas = new OutputCanvas(p5Element.canvas,"gif",180); // ファイル出力
 }
 function draw() {
-  background(0, 0, 90);
+  background(0, 0, 50);
   translate(width / 2, height / 2);
-  beginShape();
-    vertex(x1, y1);
-    vertex(x2, y2);
-    vertex(x3, y3);
-    vertex(x4, y4);
-  endShape(CLOSE);
-  let nextOjb = rotate_1degree(x1,y1);
-  let {_next_x:x1, _next_y:y1} = nextOjb;
+  push();
+  rotate(current_angle);
+  rect(0, 0, 30, 100);
+  pop();
+
+  // update
+  current_angle = my_easing.get(t) * 90;
+  if (t > 1) {
+    t = 0;
+  } else {
+    t += 0.02;
+  }
+
+  text(`angle : ${floor(current_angle)}
+my_easing.get(t) : ${my_easing.get(t)}
+t : ${t}`, -100, 100);
+
   // output_canvas.run(frameCount); // ファイル出力
 }
-function rotate_1degree(x, y) {
-  let _angle = atan(y / x);
-  _angle++;
-  let _next_x = dist(0, 0, x, y) * cos(_angle);
-  let _next_y = dist(0, 0, x, y) * cos(_angle);
-  return { _next_x, _next_y };
+
+
+class myEasing {
+  constructor() {
+    this.p = 0.1;
+    this.s = 1.70158;
+  }
+  get(t) {
+    if (t <= 0) {
+      return 0;
+    }
+    if (t >= 1.0) {
+      return 1.0;
+    }
+    let _angle = (t - this.s) * 2 / this.p
+    return pow(2, -10 * t) * sin(_angle) + 1.0;
+  }
 }
-// 参考
-// function fnc() {
-//   let _x=2;
-//   let _y=3;
-//   return {_x,_y};
-// }
-// let obj = fnc();
-// let { _x:hoge, _y:fuga } = obj;
-// console.log(fuga);
-
-// 参考
-// let x,y,radius;
-// function setup() {
-//   createCanvas(400, 400);
-//   frameRate(10);
-//   textSize(20);
-//   textAlign(CENTER);
-//   x=width;
-//   y=0;
-//   radius=dist(0,0,x,y);
-// }
-// function draw() {
-//   background(220);
-//   ellipse(x,y,5,5);
-//   line(0,0,width,height);
-
-//   // update
-//   let cur_angle=atan(y/x);
-//   let next_angle= cur_angle + radians(1);
-//   x=radius*cos(next_angle);
-//   y=radius*sin(next_angle);
-  
-//   // info
-//   text(
-// `rad  : ${floor(atan(y/x))}
-// angle: ${floor(degrees(atan(y/x)))}`,
-//     width/2,height/2
-//   );
-// }
