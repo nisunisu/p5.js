@@ -1,10 +1,9 @@
 let current_angle = 0;
 let t = 0;
-let val = 0;
-let output_canvas;
-
+let waitCount=30;
 let my_easing;
 
+let output_canvas;
 function setup() {
   let p5Element = createCanvas(400, 400);
   frameRate(30);
@@ -25,12 +24,16 @@ function draw() {
   pop();
 
   // update
-  current_angle = my_easing.get(t) * 90;
-  if (t > 1) {
-    t = 0;
-  } else {
+  if(waitCount <= 0 ){
+    current_angle = my_easing.get(t) * 90;
     t += 0.02;
+    if (t > 1) {
+      t = 0;
+      waitCount=30;
+      current_angle=0;
+    }
   }
+  waitCount--;
 
   text(`angle : ${floor(current_angle)}
 my_easing.get(t) : ${my_easing.get(t)}
