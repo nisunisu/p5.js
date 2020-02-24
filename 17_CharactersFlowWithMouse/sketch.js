@@ -21,7 +21,7 @@ function setup(){
   initialize_all();
 }
 function draw(){
-  background(hue,50,90);
+  background(hue,50,90); // ここをコメントアウトしても面白い感じになる
   let _hue;
   if(hue <= 180){
     _hue=hue+180;
