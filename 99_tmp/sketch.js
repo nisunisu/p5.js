@@ -19,12 +19,16 @@ class RectTileBackground {
     this.TILE_NUM_X = floor(width / this.SIDE); // x方向のタイルの個数。最小は1ではなく0。
     this.TILE_NUM_Y = floor(height / this.SIDE); // y方向のタイルの個数。最小は1ではなく0。
     this.TILE_NUM_TOTAL = (this.TILE_NUM_X + 1) * (this.TILE_NUM_Y + 1) - 1; // 総タイル数。Canvasから微妙にはみ出すモノも数に含める。0からスタートする
-    //   |  0  1  2  3   <- TILE_NUM_X
-    // --+-------------
-    // 0 |  0  1  2  3
-    // 1 |  4  5  6  7
-    // 2 |  8  9 10 11
-    // 3 | 12 13 14 15   <- TILE_NUM_TOTAL
+    //      0   1   2   3  <- TILE_NUM_X
+    //   +---+---+---+---+
+    // 0 |  0|  1|  2|  3|
+    //   +---+---+---+---+
+    // 1 |  4|  5|  6|  7|
+    //   +---+---+---+---+
+    // 2 |  8|  9| 10| 11|
+    //   +---+---+---+---+
+    // 3 | 12| 13| 14| 15| <- TILE_NUM_TOTAL
+    //   +---+---+---+---+
     // |
     // + TILE_NUM_Y
 
