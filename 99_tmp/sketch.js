@@ -16,11 +16,20 @@ class RectTileBackground {
   constructor() {
     this.tile_num_arr = [];
     this.SIDE = 33;
-    this.TILE_NUM_X = ceil(width / this.SIDE); // x方向のタイルの個数。最小は0ではなく1。
-    this.TILE_NUM_Y = ceil(height / this.SIDE); // y方向のタイルの個数。最小は0ではなく1。
-    this.TILE_NUM_TOTAL = this.TILE_NUM_X * this.TILE_NUM_Y; // 総タイル数。Canvasから微妙にはみ出すモノも数に含める。
+    this.TILE_NUM_X = floor(width / this.SIDE); // x方向のタイルの個数。最小は1ではなく0。
+    this.TILE_NUM_Y = floor(height / this.SIDE); // y方向のタイルの個数。最小は1ではなく0。
+    this.TILE_NUM_TOTAL = (this.TILE_NUM_X + 1) * (this.TILE_NUM_Y + 1) - 1; // 総タイル数。Canvasから微妙にはみ出すモノも数に含める。0からスタートする
+    //   |  0  1  2  3   <- TILE_NUM_X
+    // --+-------------
+    // 0 |  0  1  2  3
+    // 1 |  4  5  6  7
+    // 2 |  8  9 10 11
+    // 3 | 12 13 14 15   <- TILE_NUM_TOTAL
+    // |
+    // + TILE_NUM_Y
+
     this.tile_saturation_arr = [];
-    for(let i=0; i<this.TILE_NUM_TOTAL; i++){
+    for (let i = 0; i < this.TILE_NUM_TOTAL; i++) {
       this.tile_saturation_arr.push(0); // デフォルトカラー
     }
     this.magic_nums = []; // 色が変わったタイル（以下*）の周辺のタイルのNoを格納する。番号対応は以下の通り。
@@ -47,7 +56,7 @@ class RectTileBackground {
   }
 
   turn_1_tile_into_new_color() {
-    let _i = 1; // タイルNoは1から始まる
+    let _i = 0; // タイルNoは0から始まる
     for (let y = 0; y < height; y += this.SIDE) {
       for (let x = 0; x < width; x += this.SIDE) {
         let _saturation = 0;
@@ -73,7 +82,7 @@ class RectTileBackground {
     }
   }
 
-  turn_surround_tiles_into_new_color(){
+  turn_surround_tiles_into_new_color() {
     let _i = 1; // タイルNoは1から始まる
     for (let y = 0; y < height; y += this.SIDE) {
       for (let x = 0; x < width; x += this.SIDE) {
@@ -86,17 +95,9 @@ class RectTileBackground {
   }
 
   push_target_tile_info_into_array() {
-    const _num_x = ceil(mouseX / this.SIDE);// 左端から何個目のrectにmouseXが存在しているか、のintを返す
-    const _num_y = ceil(mouseY / this.SIDE);// 上端から何個目のrectにmouseYが存在しているか、のintを返す
-    const _num_cur = this.TILE_NUM_X * (_num_y - 1) + _num_x;
+    const _num_x = floor(mouseX / this.SIDE);// 左端から何個目のrectにmouseXが存在しているか、のintを返す
+    const _num_y = floor(mouseY / this.SIDE);// 上端から何個目のrectにmouseYが存在しているか、のintを返す
+    const _num_cur = (this.TILE_NUM_X + 1) * _num_y + _num_x;
     this.tile_num_arr.push(_num_cur);
   }
 }
-
-// 1 2 3
-// 4 * 5
-// 6 7 8
-// let is_color_arr =[];
-// const turn_tiles_into_new_color = () {
-
-// }
