@@ -97,7 +97,8 @@ class RectTileBackground {
     const val1 = floor(random(1,9));
     const val2 = (val1 + floor(random(1,9)) ) % 9 ;
     
-    // saturationを変える
+    // クリックしたタイルとその周辺の2タイル（ランダム）のsaturationを変える
+    this.tile_saturation_arr[_num_arr[0]]=60;
     this.tile_saturation_arr[_num_arr[val1]]=60;
     this.tile_saturation_arr[_num_arr[val2]]=60;
   }
