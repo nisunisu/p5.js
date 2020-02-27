@@ -53,6 +53,7 @@ class RectTileBackground {
       for (let x = 0; x < width; x += this.SIDE) {
         if(this.wait_count_arr[_i] <= 0){
           fill(0, parseInt(this.tile_saturation_arr[_i],10), 80); // tile_saturation_arrの中身が文字列と判定される？のでparseIntをつける
+          this.wait_count_arr[_i]=0;
         }else{
           fill(0, parseInt(this.tile_saturation_prev_arr[_i],10), 80); // 待ち時間が1以上の場合は、直前のsaturationにする
           this.wait_count_arr[_i]--;
