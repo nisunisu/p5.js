@@ -10,8 +10,7 @@ function draw() {
   rtb.run();
 }
 function mousePressed() {
-  rtb.push_target_tile_info_into_array();
-  rtb.set_surround_2tiles_saturation(rtb.tile_num_arr[rtb.tile_num_arr.length - 1]);
+  rtb.run_mousepressed();
 }
 class RectTileBackground {
   constructor() {
@@ -45,6 +44,11 @@ class RectTileBackground {
 
   run() {
     this.turn_1_tile_into_new_color();
+  }
+  
+  run_mousepressed(){
+    this.push_target_tile_info_into_array();
+    this.set_surround_2tiles_saturation(this.tile_num_arr[this.tile_num_arr.length - 1]);
   }
 
   turn_1_tile_into_new_color() {
