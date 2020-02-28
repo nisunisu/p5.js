@@ -35,7 +35,7 @@ class RectTileBackground {
     this.tile_saturation_arr = [];
     this.tile_saturation_prev_arr = [];
     this.wait_count_arr = [];
-    for (let i = 0; i < this.TILE_NUM_TOTAL; i++) {
+    for (let i = 0; i <= this.TILE_NUM_TOTAL; i++) {
       this.tile_saturation_arr.push(0); // デフォルトカラー
       this.tile_saturation_prev_arr.push(0); // デフォルトカラー
       this.wait_count_arr.push(0); // 待ち時間の初期値は0
