@@ -47,8 +47,15 @@ class RectTileBackground {
   }
   
   run_mousepressed(){
-    this.push_target_tile_info_into_array();
-    this.set_surround_2tiles_saturation(this.tile_num_arr[this.tile_num_arr.length - 1]);
+    const _obj = this.get_tile_info_obj_over_mouse();
+    this.tile_num_arr.push(_obj.num_cur);
+
+    const _obj_arr = this.get_surround_2tiles_info_obj_arr(_obj.num_cur);
+    _obj_arr.forEach((_obj, _index) => {
+      this.tile_saturation_prev_arr[_obj.num_cur] = this.tile_saturation_arr[_obj.num_cur]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
+      this.tile_saturation_arr[_obj.num_cur] = 60; // クリックしたタイルとその周辺の2タイルのsaturationを変える
+      this.wait_count_arr[_obj.num_cur] = 5 * _obj.index; // 待機時間を設定
+    });
   }
 
   turn_1_tile_into_new_color() {
@@ -79,7 +86,7 @@ class RectTileBackground {
     }
   }
 
-  set_surround_2tiles_saturation(tile_num) {
+  get_surround_2tiles_info_obj_arr(tile_num) {
     // 1 2 3
     // 4 0 5
     // 6 7 8
@@ -114,21 +121,31 @@ class RectTileBackground {
     const val2 = (val1 + floor(random(1,9)) ) % 9 ;
 
     const val_arr=[val0, val1, val2];
-    val_arr.forEach((_val, _index) => {
-      // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
-      this.tile_saturation_prev_arr[_num_arr[_val]] = this.tile_saturation_arr[_num_arr[_val]];
-      // クリックしたタイルとその周辺の2タイルのsaturationを変える
-      this.tile_saturation_arr[_num_arr[_val]] = 60;
-      // 待機時間を設定
-      this.wait_count_arr[_num_arr[_val]] = 5 * _index;
-    });
     
+    return {
+      tile_0 = {
+        num_cur: _num_arr[val0],
+        index: 0
+      },
+      tile_1 = {
+        num_cur: _num_arr[val1],
+        index: 1
+      },
+      tile_2 = {
+        num_cur: _num_arr[val2],
+        index: 2
+      }
+    }
   }
 
-  push_target_tile_info_into_array() {
-    const _num_x = floor(mouseX / this.SIDE);// 左端から何個目のrectにmouseXが存在しているか、のintを返す
-    const _num_y = floor(mouseY / this.SIDE);// 上端から何個目のrectにmouseYが存在しているか、のintを返す
-    const _num_cur = (this.TILE_NUM_X + 1) * _num_y + _num_x; // タイルNoの計算
-    this.tile_num_arr.push(_num_cur);
+  get_tile_info_obj_over_mouse() {
+    // マウス上のタイル情報を取得
+    const _num_x=floor(mouseX / this.SIDE);
+    const _num_y=floor(mouseY / this.SIDE);
+    return {
+      num_x: _num_x, // 左端から何個目のrectにmouseXが存在しているか、のintを返す
+      num_y: _num_y, // 上端から何個目のrectにmouseYが存在しているか、のintを返す
+      num_cur: (this.TILE_NUM_X + 1) * _num_y + _num_x // タイルNo
+    }
   }
 }
