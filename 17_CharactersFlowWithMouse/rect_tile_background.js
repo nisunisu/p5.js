@@ -43,7 +43,7 @@ class RectTileBackground {
   }
 
   run() {
-    this.turn_1_tile_into_new_color();
+    this.display_tiles();
   }
   
   run_mousepressed(){
@@ -58,7 +58,7 @@ class RectTileBackground {
     });
   }
 
-  turn_1_tile_into_new_color() {
+  display_tiles() {
     let _i = 0; // タイルNoは0から始まる
     for (let y = 0; y < height; y += this.SIDE) {
       for (let x = 0; x < width; x += this.SIDE) {
