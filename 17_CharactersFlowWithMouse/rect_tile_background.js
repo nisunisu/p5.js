@@ -50,12 +50,12 @@ class RectTileBackground {
     const _obj = this.get_tile_info_obj_over_mouse();
     this.tile_num_arr.push(_obj.num_cur);
 
-    const _obj_arr = this.get_surround_2tiles_info_obj_arr(_obj.num_cur);
-    _obj_arr.forEach((_obj, _index) => {
-      this.tile_saturation_prev_arr[_obj.num_cur] = this.tile_saturation_arr[_obj.num_cur]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
-      this.tile_saturation_arr[_obj.num_cur] = 60; // クリックしたタイルとその周辺の2タイルのsaturationを変える
-      this.wait_count_arr[_obj.num_cur] = 5 * _obj.index; // 待機時間を設定
-    });
+    const _arr = this.get_surround_2tiles_info_arr(_obj.num_cur);
+    for(let i=0; i< _arr.length; i++){
+      this.tile_saturation_prev_arr[_arr[i]] = this.tile_saturation_arr[_arr[i]]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
+      this.tile_saturation_arr[_arr[i]] = 60; // クリックしたタイルとその周辺の2タイルのsaturationを変える
+      this.wait_count_arr[_arr[i]] = 5 * i; // 待機時間を設定
+    }
   }
 
   display_tiles() {
@@ -86,7 +86,7 @@ class RectTileBackground {
     }
   }
 
-  get_surround_2tiles_info_obj_arr(tile_num) {
+  get_surround_2tiles_info_arr(tile_num) {
     // 1 2 3
     // 4 0 5
     // 6 7 8
@@ -119,23 +119,8 @@ class RectTileBackground {
     const val0 = 0;
     const val1 = floor(random(1,9));
     const val2 = (val1 + floor(random(1,9)) ) % 9 ;
-
-    const val_arr=[val0, val1, val2];
-    
-    return {
-      tile_0 = {
-        num_cur: _num_arr[val0],
-        index: 0
-      },
-      tile_1 = {
-        num_cur: _num_arr[val1],
-        index: 1
-      },
-      tile_2 = {
-        num_cur: _num_arr[val2],
-        index: 2
-      }
-    }
+    const _arr = [_num_arr[val0], _num_arr[val1], _num_arr[val2]];
+    return _arr;
   }
 
   get_tile_info_obj_over_mouse() {
