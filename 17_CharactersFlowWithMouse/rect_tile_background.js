@@ -49,13 +49,16 @@ class RectTileBackground {
   run_mousepressed(){
     const _obj = this.get_tile_info_obj_over_mouse();
     this.tile_num_arr.push(_obj.num_cur);
+    
+    this.set_new_saturation_of_all_tiles();
+    this.set_waitcount_of_all_tiles(_obj);
 
-    const _arr = this.get_surround_2tiles_info_arr(_obj.num_cur);
-    for(let i=0; i< _arr.length; i++){
-      this.tile_saturation_prev_arr[_arr[i]] = this.tile_saturation_arr[_arr[i]]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
-      this.tile_saturation_arr[_arr[i]] = 60; // クリックしたタイルとその周辺の2タイルのsaturationを変える
-      this.wait_count_arr[_arr[i]] = 5 * i; // 待機時間を設定
-    }
+    // const _arr = this.get_surround_2tiles_info_arr(_obj.num_cur);
+    // for(let i=0; i< _arr.length; i++){
+    //   this.tile_saturation_prev_arr[_arr[i]] = this.tile_saturation_arr[_arr[i]]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のsaturationに現在のsaturationを代入
+    //   this.tile_saturation_arr[_arr[i]] = 60; // クリックしたタイルとその周辺の2タイルのsaturationを変える
+    //   this.wait_count_arr[_arr[i]] = 5 * i; // 待機時間を設定
+    // }
   }
 
   display_tiles() {
@@ -121,6 +124,44 @@ class RectTileBackground {
     const val2 = (val1 + floor(random(1,9)) ) % 9 ;
     const _arr = [_num_arr[val0], _num_arr[val1], _num_arr[val2]];
     return _arr;
+  }
+
+  set_waitcount_of_all_tiles(_tile_info_obj) {
+    //     0   1   2   3   4  <- TILE_NUM_X
+    //   +---+---+---+---+---+
+    // 0 | 4 | 3 | 2 | 3 | 4 | 2
+    //   +---+---+---+---+---+
+    // 1 | 3 | 2 | 1 | 2 | 3 | 1
+    //   +---+---+---+---+---+
+    // 2 | 2 | 1 | 0 | 1 | 2 | 0  <- Y-distance from 0
+    //   +---+---+---+---+---+
+    // 3 | 3 | 2 | 1 | 2 | 3 | 1
+    //   +---+---+---+---+---+
+    // 4 | 4 | 3 | 2 | 3 | 4 | 2
+    // | +---+---+---+---+---+
+    // |   2   1   0   1   2      <- X-distance from 0
+    // |
+    // +-- TILE_NUM_Y
+    
+    // _tile_info_obj = マウスクリックした箇所 からの距離に応じてwait_countを設定する
+    const _max_distance=(this.TILE_NUM_X+1) + (this.TILE_NUM_Y+1); // 最大距離
+    let i=0;
+    for(let _num_y=0; _num_y <= this.TILE_NUM_Y; _num_y++){
+      for(let _num_x=0; _num_x <= this.TILE_NUM_X; _num_x++){
+        const _relative_distance = abs(_tile_info_obj.num_x - _num_x) + abs(_tile_info_obj.num_x - _num_y); // 0からの相対距離
+        this.wait_count_arr[i] = floor(map(_relative_distance,0,_max_distance,0,120))+floor(random(50));
+        i++;
+      }
+    }
+  }
+  
+  set_new_saturation_of_all_tiles(){
+    // 現在のsaturation値をprevに入れて、ランダムな値を現在地としてセット
+    const _new_saturation=random(100);
+    for (let i = 0; i <= this.TILE_NUM_TOTAL; i++) {
+      this.tile_saturation_prev_arr[i] = this.tile_saturation_arr[i];
+      this.tile_saturation_arr[i]=_new_saturation; // 
+    }
   }
 
   get_tile_info_obj_over_mouse() {
