@@ -3,7 +3,7 @@ function setup() {
   createCanvas(400, 400);
   frameRate(30);
   colorMode(HSB, 360, 100, 100, 100);
-  // noStroke();
+  noStroke();
   rtb = new RectTileBackground();
 }
 function draw() {
@@ -14,8 +14,7 @@ function mousePressed() {
 }
 class RectTileBackground {
   constructor() {
-    this.tile_num_arr = [];
-    this.SIDE = 33;
+    this.SIDE = 23; // [FIX]25を指定すると挙動がおかしい
     this.TILE_NUM_X = floor(width / this.SIDE); // x方向のタイルの個数。最小は1ではなく0。
     this.TILE_NUM_Y = floor(height / this.SIDE); // y方向のタイルの個数。最小は1ではなく0。
     this.TILE_NUM_TOTAL = (this.TILE_NUM_X + 1) * (this.TILE_NUM_Y + 1) - 1; // 総タイル数。Canvasから微妙にはみ出すモノも数に含める。0からスタートする
@@ -45,20 +44,11 @@ class RectTileBackground {
   run() {
     this.display_tiles();
   }
-  
-  run_mousepressed(){
-    const _obj = this.get_tile_info_obj_over_mouse();
-    this.tile_num_arr.push(_obj.num_cur);
-    
-    this.set_new_hue_of_all_tiles();
-    this.set_waitcount_of_all_tiles(_obj);
 
-    // const _arr = this.get_surround_2tiles_info_arr(_obj.num_cur);
-    // for(let i=0; i< _arr.length; i++){
-    //   this.tile_hue_prev_arr[_arr[i]] = this.tile_hue_arr[_arr[i]]; // クリックしたタイルとその周辺の2タイル（ランダム）の直前のhueに現在のhueを代入
-    //   this.tile_hue_arr[_arr[i]] = 60; // クリックしたタイルとその周辺の2タイルのhueを変える
-    //   this.wait_count_arr[_arr[i]] = 5 * i; // 待機時間を設定
-    // }
+  run_mousepressed(){
+    const _tile_info_obj_over_mouse = this.get_tile_info_obj_over_mouse();
+    this.set_new_hue_of_all_tiles(); // nextのhueをセットする（waitcountが0にならない限りnextにはならない）
+    this.set_waitcount_of_all_tiles(_tile_info_obj_over_mouse); 
   }
 
   display_tiles() {
@@ -66,64 +56,16 @@ class RectTileBackground {
     for (let y = 0; y < height; y += this.SIDE) {
       for (let x = 0; x < width; x += this.SIDE) {
         if(this.wait_count_arr[_i] <= 0){
-          fill(parseInt(this.tile_hue_arr[_i],10), 80, 80); // tile_hue_arrの中身が文字列と判定される？のでparseIntをつける
+          fill(parseInt(this.tile_hue_arr[_i],10), 50, 90); // [FIX]tile_hue_arrの中身が文字列と判定される？のでparseIntをつける
           this.wait_count_arr[_i]=0;
         }else{
-          fill(parseInt(this.tile_hue_prev_arr[_i],10), 80, 80); // 待ち時間が1以上の場合は、直前のhueにする
+          fill(parseInt(this.tile_hue_prev_arr[_i],10), 50, 90); // 待ち時間が1以上の場合は、直前のhueにする
           this.wait_count_arr[_i]--;
         }
         rect(x, y, this.SIDE, this.SIDE);
-
-        // debug用
-        push()
-        fill(180, 50, 50);
-        textSize(9)
-        textAlign(CENTER);
-        text(`${_i}`, x + this.SIDE / 2, y + this.SIDE / 2);
-        text(`${this.tile_num_arr[this.tile_num_arr.length - 1]}`, mouseX, mouseY);
-        pop()
-        // debug用
-
         _i++; // 次のタイルNoへ
       }
     }
-  }
-
-  get_surround_2tiles_info_arr(tile_num) {
-    // 1 2 3
-    // 4 0 5
-    // 6 7 8
-    //
-    //   left_up | up | right_up
-    // ----------+----+------------
-    //      left | *  | right
-    // ----------+----+-----------
-    // left_down |down| right_down
-    //
-    //  - TILE_NUM_X - 1 | - TILE_NUM_X | - TILE_NUM_X + 1
-    // ------------------+--------------+-------------------
-    //               - 1 |       0      | + 1
-    // ------------------+--------------+-------------------
-    //  + TILE_NUM_X - 1 | + TILE_NUM_X | + TILE_NUM_X + 1
-
-    const _num_arr=[];
-    _num_arr.push(tile_num);                       // 0 : the CENTER tile
-    _num_arr.push(tile_num - this.TILE_NUM_X - 2); // 1 : left up
-    _num_arr.push(tile_num - this.TILE_NUM_X - 1); // 2 : up
-    _num_arr.push(tile_num - this.TILE_NUM_X);     // 3 : right up
-    _num_arr.push(tile_num - 1);                   // 4 : left
-    _num_arr.push(tile_num + 1);                   // 5 : right
-    _num_arr.push(tile_num + this.TILE_NUM_X);     // 6 : left down
-    _num_arr.push(tile_num + this.TILE_NUM_X + 1); // 7 : down
-    _num_arr.push(tile_num + this.TILE_NUM_X + 2); // 8 : right down
-
-    // 1-8の整数のうちランダムで2つ選ぶ
-    // [FIX] val2が0になる場合がある
-    const val0 = 0;
-    const val1 = floor(random(1,9));
-    const val2 = (val1 + floor(random(1,9)) ) % 9 ;
-    const _arr = [_num_arr[val0], _num_arr[val1], _num_arr[val2]];
-    return _arr;
   }
 
   set_waitcount_of_all_tiles(_tile_info_obj) {
