@@ -148,7 +148,7 @@ class RectTileBackground {
     let i=0;
     for(let _num_y=0; _num_y <= this.TILE_NUM_Y; _num_y++){
       for(let _num_x=0; _num_x <= this.TILE_NUM_X; _num_x++){
-        const _relative_distance = abs(_tile_info_obj.num_x - _num_x) + abs(_tile_info_obj.num_x - _num_y); // 0からの相対距離
+        const _relative_distance = abs(_tile_info_obj.num_x - _num_x) + abs(_tile_info_obj.num_y - _num_y); // 0からの相対距離
         this.wait_count_arr[i] = floor(map(_relative_distance,0,_max_distance,0,120))+floor(random(10));
         i++;
       }
