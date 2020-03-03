@@ -12,16 +12,21 @@ let hue=0;
 let e_x, e_y, e_r, e_alpha;
 let e_is=false;
 
+let rtb;
+
 function setup(){
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(400,400);
   frameRate(30);
   colorMode(HSB,360,100,100,100);
   textSize(15);
   noStroke();
   initialize_all();
+  
+  rtb = new RectTileBackground();
 }
 function draw(){
-  background(hue,50,90); // ここをコメントアウトしても面白い感じになる
+  rtb.run();
+  
   let _hue;
   if(hue <= 180){
     _hue=hue+180;
@@ -80,4 +85,6 @@ function mousePressed() {
   e_r=0;
   e_alpha=100;
   e_is=true;
+  
+  rtb.run_mousepressed(hue);
 }

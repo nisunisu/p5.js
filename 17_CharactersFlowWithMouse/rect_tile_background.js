@@ -1,17 +1,3 @@
-let rtb;
-function setup() {
-  createCanvas(400, 400);
-  frameRate(30);
-  colorMode(HSB, 360, 100, 100, 100);
-  noStroke();
-  rtb = new RectTileBackground();
-}
-function draw() {
-  rtb.run();
-}
-function mousePressed() {
-  rtb.run_mousepressed();
-}
 class RectTileBackground {
   constructor() {
     this.SIDE = 23; // [FIX]25を指定すると挙動がおかしい
@@ -45,9 +31,9 @@ class RectTileBackground {
     this.display_tiles();
   }
 
-  run_mousepressed(){
+  run_mousepressed(_hue){
     const _tile_info_obj_over_mouse = this.get_tile_info_obj_over_mouse();
-    this.set_new_hue_of_all_tiles(); // nextのhueをセットする（waitcountが0にならない限りnextにはならない）
+    this.set_new_hue_of_all_tiles(_hue); // nextのhueをセットする（waitcountが0にならない限りnextにはならない）
     this.set_waitcount_of_all_tiles(_tile_info_obj_over_mouse); 
   }
 
@@ -97,9 +83,10 @@ class RectTileBackground {
     }
   }
   
-  set_new_hue_of_all_tiles(){
-    // 現在のhue値をprevに入れて、ランダムな値を現在地としてセット
-    const _new_hue=random(360);
+  set_new_hue_of_all_tiles(_hue){
+    // 1. 現在のhue値をprevに入れる
+    // 1. 引数で渡された値をカレント値としてセット
+    const _new_hue=random(_hue);
     for (let i = 0; i <= this.TILE_NUM_TOTAL; i++) {
       this.tile_hue_prev_arr[i] = this.tile_hue_arr[i];
       this.tile_hue_arr[i]=_new_hue; // 
