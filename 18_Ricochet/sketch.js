@@ -25,7 +25,12 @@ class Ricochet{
     let _x=random(width);
     let _y=random(height);
     this.location=createVector(_x, _y);
-    this.velocity=createVector(random(-5,5),random(-5,5));
+    
+    // velocity : Vector from the center of the Canvas
+    let _center=createVector(width/2, height/2);
+    this.velocity=p5.Vector.sub(this.location, _center);
+    this.velocity.normalize();
+
     this.acceleration=createVector(0, 0);
     this.radius=3;
   }
