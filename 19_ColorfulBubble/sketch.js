@@ -1,8 +1,4 @@
-let bomb = [];
-let distance = 100;
-let angle_base = 0;
 let rad_base = 150;
-let particle_info_arr = []; // vector and color info
 function setup() {
   createCanvas(400, 400);
   colorMode(HSB,360,100,100,100);
@@ -10,40 +6,23 @@ function setup() {
   noFill();
   blendMode(ADD);
   stroke(0,0,40);
+  noLoop();
 }
 
 function draw() {
-  clear();
+  background(0,0,10);
   translate(width/2, height/2);
   
-  let _x = rad_base * cos(angle_base);
-  let _y = rad_base * sin(angle_base);
-  if(Math.floor(angle_base * 10)  % 57 == 0){ // 5.7度ごとにpushする
-    const _vector = createVector(_x, _y);
+  for (let angle = 0; angle < 1800 ;  angle+= 5.7) {
+    const _rad = map(angle, 0, 1800, 250, 10);
+    const _x = _rad * cos(angle);
+    const _y = _rad * sin(angle);
     const _hue    = random(360);
-    const _size   = random(5, 40);
-    const _hash   = {
-      vector : _vector,
-      hue    : _hue,
-      size   : _size
-    };
-    particle_info_arr.push(_hash)
-  }
-  for (let i = 0; i < particle_info_arr.length; i++) {
-    const _particle_info = particle_info_arr[i];
-    const _vector = _particle_info.vector;
-    const _hue    = _particle_info.hue;
-    const _size   = _particle_info.size;
+    const _size   = random(2, 60);
     fill(_hue, 80, 80, 30);
-    ellipse(_vector.x, _vector.y, _size, _size);
+    push()
+    rotate(angle);
+    ellipse(_x, _y, _size*0.4, _size);
+    pop()
   }
-
-  
-  // 表示用
-  line(0, 0, _x, _y);
-  ellipse(_x, _y, 5, 5)
-  
-  
-  // update
-  angle_base+=0.1;
 }
