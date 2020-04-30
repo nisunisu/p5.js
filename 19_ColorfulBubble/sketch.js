@@ -5,7 +5,7 @@ function setup() {
   angleMode(DEGREES);
   noFill();
   blendMode(ADD);
-  stroke(0,0,40);
+  noStroke();
   noLoop();
 }
 
